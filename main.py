@@ -11,18 +11,23 @@ def alarm_logic(setAlarmTimer):
         currentTime = actualTime.strftime("%H : %M : %S")
         currentDate = actualTime.strftime("%d / %m / %Y")
         the_message = "Current Time: " + str(currentTime)
-        #print(the_message) // for testing purpose
+        print(the_message) # for testing purpose
         if currentTime == setAlarmTimer:
             ws.PlaySound("sound.wav", ws.SND_ASYNC)
+            alarm_set.destroy()
             guiWindow.after(100, lambda: stop_button.place(x=140, y=100))
             break
 
 def alarm(setAlarmTimer):
     alarm_thread = threading.Thread(target=alarm_logic, args=(setAlarmTimer,))
-    alarm_thread.start()
+    alarm_thread.start() 
 
 def getAlarmTime():  
     alarmSetTime = f"{hour.get()} : {minute.get()} : {second.get()}"  
+    alarm_set.place(  
+        x = 140,  
+        y = 100  
+        )  
     alarm(alarmSetTime)
   
 def stopAlarm():
@@ -30,7 +35,8 @@ def stopAlarm():
     ws.PlaySound(None, ws.SND_PURGE)
     # Remove the stop button from the screen
     stop_button.destroy()
-
+    exitApp()
+    
 # creating the GUI for the application  
 guiWindow = Tk()  
 guiWindow.title("The Alarm Clock")  
@@ -128,5 +134,20 @@ stop_button = Button(
     command=stopAlarm,
     font=(20)
     )
-       
+
+alarm_set = Button(
+    guiWindow,
+    text="Alarm Set",
+    fg="white",
+    bg="grey",
+    width=15,
+    command=stopAlarm,
+    font=(20)
+    )
+
+
+#to close the app after stopping the alarm
+def exitApp():
+    guiWindow.destroy()
+
 guiWindow.mainloop()
